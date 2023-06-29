@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 type TBlog = {
   title: string;
@@ -6,24 +6,29 @@ type TBlog = {
   body: string;
 };
 
-const blogSchema = new Schema<TBlog>({
-  title: {
-    type: String,
-    required: true,
-    validate: (v: string) => v.length > 5,
+const blogSchema = new Schema<TBlog>(
+  {
+    title: {
+      type: String,
+      required: true,
+      validate: (v: string) => v.length > 5,
+    },
+    image: {
+      type: Buffer,
+      required: true,
+    },
+    body: {
+      type: String,
+      required: true,
+      validate: (v: string) => v.length > 30,
+    },
   },
-  image: {
-    type: Buffer,
-    required: true,
-  },
-  body: {
-    type: String,
-    required: true,
-    validate: (v: string) => v.length > 30,
-  },
-});
+  {
+    versionKey: false,
+  }
+);
 
-blogSchema.set('toJSON', {
+blogSchema.set("toJSON", {
   transform: (_, ret) => {
     ret.id = ret._id.toString();
     delete ret._id;
@@ -31,4 +36,4 @@ blogSchema.set('toJSON', {
   },
 });
 
-export const Blog = model('Blog', blogSchema);
+export const Blog = model("Blog", blogSchema);
