@@ -10,7 +10,7 @@ blogRouter.get("/", async (_, res, next) => {
   try {
     const blogs = await Blog.find().lean();
 
-    return res.send({ data: blogs });
+    return res.send(blogs);
   } catch (err) {
     next(err);
   }
@@ -23,7 +23,7 @@ blogRouter.get("/:id", async (req, res, next) => {
     const blog = await Blog.findById(id);
     if (!blog) throw new NotFound("Blog with this `id` does not exist.");
 
-    return res.send({ data: blog.toObject() });
+    return res.send(blog.toObject());
   } catch (err) {
     next(err);
   }
@@ -70,7 +70,7 @@ blogRouter.post("/", async (req, res, next) => {
     });
     await newBlogPost.save();
 
-    return res.status(201).json({ data: newBlogPost.toObject() });
+    return res.status(201).json(newBlogPost.toObject());
   } catch (err) {
     next(err);
   }
@@ -103,7 +103,7 @@ blogRouter.put("/:id", async (req, res, next) => {
 
     await blog.save();
 
-    return res.status(202).json({ data: blog.toObject() });
+    return res.status(202).json(blog.toObject());
   } catch (err) {
     next(err);
   }
