@@ -1,1 +1,1 @@
-
+export * from './blog.model';
