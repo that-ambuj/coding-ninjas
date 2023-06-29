@@ -1,7 +1,9 @@
 import express, { ErrorRequestHandler } from "express";
 import { config } from "dotenv";
-import mongoose, { connect } from "mongoose";
+import { connect } from "mongoose";
 import nocache from "nocache";
+import morgan from "morgan";
+import helmet from "helmet";
 
 import router from "./routers";
 
@@ -19,6 +21,9 @@ connect(process.env.MONGO_URI)
 
 export const app = express();
 app.use(express.json());
+
+app.use(morgan("dev"));
+app.use(helmet());
 
 app.set("etag", false);
 app.use(nocache());
