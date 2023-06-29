@@ -20,7 +20,7 @@ connect(process.env.MONGO_URI)
     console.error(`Error occured while connecting to MongoDB: ${err}`);
   });
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
 app.set("etag", false);
@@ -35,9 +35,14 @@ function errorHandler(): ErrorRequestHandler {
     }
 
     let status = err.statusCode ?? err.status ?? 500;
-    const error = err.message ?? "Internal Server Error";
+    let error = err.message ?? "Internal Server Error";
 
     if (err.name === "ValidationError") status = 400;
+
+    if (err.name === "CastError") {
+      status = 400;
+      error = `Malformatted '${err.path}': '${err.value}'(${err.valueType}) is not of type ${err.kind}`;
+    }
 
     res.status(status).json({ status, error });
   };

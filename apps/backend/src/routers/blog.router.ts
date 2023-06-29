@@ -20,10 +20,10 @@ blogRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const blog = await Blog.findById(id).lean();
+    const blog = await Blog.findById(id);
     if (!blog) throw new NotFound("Blog with this `id` does not exist.");
 
-    return res.send({ data: blog });
+    return res.send({ data: blog.toObject() });
   } catch (err) {
     next(err);
   }
@@ -36,7 +36,7 @@ blogRouter.delete("/:id", async (req, res, next) => {
     const { deletedCount } = await Blog.deleteOne({ _id: id });
 
     if (deletedCount < 1)
-      throw new BadRequest("Blog with this `id` does not exist.");
+      throw new BadRequest(`Blog with id: ${id} does not exist.`);
 
     return res
       .status(200)
@@ -58,7 +58,7 @@ blogRouter.post("/", async (req, res, next) => {
     // for storing in MongoDB. realisticially, we would use an s3 bucket
     // to upload image files to and store it's key as `imageKey` in DB instead
     if (!validator.isBase64(image)) {
-      throw new BadRequest("`image` field is not a valid base64 string");
+      throw new BadRequest("`image` is not a valid base64 string");
     }
 
     const buffer = Buffer.from(image, "base64");
