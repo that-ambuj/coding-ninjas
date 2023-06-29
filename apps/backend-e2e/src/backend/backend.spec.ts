@@ -21,15 +21,13 @@ describe("Create a Blog", () => {
   it("should create a new blog", async () => {
     const { status, data } = await axios.post("/api/blogs", testBlog);
 
-    tempId = data.data._id;
+    tempId = data._id;
 
     expect(status).toBe(201);
     expect(data).toMatchObject({
-      data: {
-        title: testBlog.title,
-        image: testBlog.image,
-        body: testBlog.body,
-      },
+      title: testBlog.title,
+      image: testBlog.image,
+      body: testBlog.body,
     });
   });
 
@@ -67,14 +65,14 @@ describe("Read Blogs", () => {
     const { status, data } = await axios.get("/api/blogs");
 
     expect(status).toBe(200);
-    expect(data.data.length).toBeGreaterThan(0);
+    expect(data.length).toBeGreaterThan(0);
   });
 
   it("Should give a blog by ID with status 200", async () => {
     const { status, data } = await axios.get(`/api/blogs/${tempId}`);
 
     expect(status).toBe(200);
-    expect(data.data._id).toBe(tempId);
+    expect(data._id).toBe(tempId);
   });
 
   it("Should return validation error for invalid Blog ID", async () => {
