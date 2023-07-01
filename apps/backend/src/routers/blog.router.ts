@@ -6,11 +6,21 @@ import { BadRequest, NotFound } from "../errors";
 
 export const blogRouter = Router();
 
-blogRouter.get("/", async (_, res, next) => {
+blogRouter.get("/", async (req, res, next) => {
   try {
-    const blogs = await Blog.find().lean();
+    const { pageQuery, limitQuery } = req.query;
 
-    return res.send(blogs);
+    const page = pageQuery ? Number(pageQuery) : 1;
+    const limit = limitQuery ? Number(limitQuery) : 10;
+
+    const skip = (page - 1) * limit;
+
+    const blogs = await Blog.find().skip(skip).limit(limit).lean();
+
+    const totalCount = await Blog.countDocuments();
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return res.send({ blogs, totalPages, page });
   } catch (err) {
     next(err);
   }
