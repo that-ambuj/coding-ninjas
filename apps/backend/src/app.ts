@@ -4,6 +4,7 @@ import { connect } from "mongoose";
 import nocache from "nocache";
 import morgan from "morgan";
 import helmet from "helmet";
+import cors from "cors";
 
 import router from "./routers";
 
@@ -21,6 +22,18 @@ connect(process.env.MONGO_URI)
 
 export const app = express();
 app.use(express.json());
+
+const corsConfig = {
+  origin: [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+  ],
+};
+
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
 
 app.use(morgan("dev"));
 app.use(helmet());
