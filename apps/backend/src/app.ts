@@ -20,7 +20,7 @@ connect(process.env.MONGO_URI)
     console.error(`Error occured while connecting to MongoDB: ${err}`);
   });
 
-export const app = express();
+const app = express();
 app.use(express.json());
 
 const corsConfig = {
@@ -64,3 +64,5 @@ function errorHandler(): ErrorRequestHandler {
 }
 
 app.use(errorHandler());
+
+export default app;
