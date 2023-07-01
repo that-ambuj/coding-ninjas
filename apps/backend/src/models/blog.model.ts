@@ -11,7 +11,7 @@ const blogSchema = new Schema<Blog>(
     title: {
       type: String,
       required: true,
-      validate: (v: string) => v.length > 5,
+      validate: (v: string) => v.length > 5 && v.length < 70,
     },
     image: {
       type: Buffer,
