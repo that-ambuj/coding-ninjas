@@ -38,20 +38,20 @@ export default async function BlogList({
       <div>
         {blogs.map(({ _id, title, body, image }) => (
           <Link href={`/blogs/${_id}`} key={_id}>
-            <div className="flex justify-between border border-neutral-200 rounded-xl mx-2 my-4 xl:mx-auto p-4">
+            <div className="flex flex-col md:flex-row gap-4 justify-between border border-neutral-200 bg-white hover:drop-shadow-xl transition-all rounded-xl mx-2 my-4 xl:mx-auto p-4">
               <Image
                 alt={title}
-                className="object-cover w-64 h-48 rounded-md"
+                className="object-cover w-full md:w-1/3 h-64 md:h-64 rounded-lg"
                 src={`data:image/png;base64,${image}`}
                 width={0}
                 height={0}
               />
-              <div className="w-3/4 flex flex-col gap-2">
+              <div className="w-full md:w-2/3 flex flex-col gap-2">
                 <h2 className="text-4xl md:text-4xl font-medium tracking-tight overflow-clip text-clip">
                   {title.slice(0, 70)}
                 </h2>
                 <div className="text-neutral-600 overflow-clip text-ellipsis text-sm md:text-base md:leading-tight font-medium">
-                  {body.length > 500 ? body.slice(0, 500) + "..." : body}
+                  {body.length > 400 ? body.slice(0, 400) + "..." : body}
                 </div>
               </div>
             </div>
