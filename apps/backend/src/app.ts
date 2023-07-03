@@ -5,10 +5,6 @@ import nocache from "nocache";
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
-import nextjs from "next";
-import url from "url";
-
-import { workspaceRoot } from "@nx/devkit";
 
 import router from "./routers";
 
@@ -19,7 +15,6 @@ export const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 config();
 
 import "express-async-errors";
-import path from "path";
 
 connect(process.env.MONGO_URI)
   .then(() => {
@@ -49,31 +44,6 @@ app.use(helmet());
 
 app.set("etag", false);
 app.use(nocache());
-
-const nextApp = nextjs({
-  dev,
-  hostname,
-  port,
-  dir: `${workspaceRoot}/apps/frontend`,
-  conf: {
-    images: {
-      remotePatterns: [{ protocol: "https", hostname: "**" }],
-    },
-  },
-});
-const handle = nextApp.getRequestHandler();
-
-nextApp.prepare().then(() => {
-  app.use("/", async (req, res, next) => {
-    try {
-      const parsedUrl = url.parse(req.url, true);
-
-      await handle(req, res, parsedUrl);
-    } catch (err) {
-      next(err);
-    }
-  });
-});
 
 app.use("/api", router);
 
