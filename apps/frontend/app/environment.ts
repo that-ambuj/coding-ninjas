@@ -6,6 +6,13 @@ export function setEnvironment() {
   if (isDevMode) {
     axios.defaults.baseURL = "http://localhost:3000";
   } else {
-    axios.defaults.baseURL = process.env.HOST;
+    const protocol = process.env.PROTOCOL ?? "http://";
+    let host = protocol + process.env.HOST ?? "localhost";
+
+    if (process.env.SERVER_PORT) {
+      host += `:${process.env.SERVER_PORT}`;
+    }
+
+    axios.defaults.baseURL = host;
   }
 }

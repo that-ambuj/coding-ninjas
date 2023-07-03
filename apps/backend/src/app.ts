@@ -10,7 +10,9 @@ import router from "./routers";
 
 export const dev = process.env.NODE_ENV === "development";
 export const hostname = process.env.HOST ?? "localhost";
-export const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+export const port = process.env.SERVER_PORT
+  ? Number(process.env.SERVER_PORT)
+  : 3000;
 
 config();
 
